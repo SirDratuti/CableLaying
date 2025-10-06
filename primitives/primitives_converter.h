@@ -1,5 +1,4 @@
-#ifndef ROADS_PRIMITIVESCONVERTER_H
-#define ROADS_PRIMITIVESCONVERTER_H
+#pragma once
 
 #include "Point.h"
 #include "Edge.h"
@@ -19,5 +18,3 @@ namespace primitives_converter {
         return {convert(edge.start), convert(edge.end)};
     }
 };
-
-#endif

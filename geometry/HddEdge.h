@@ -1,5 +1,4 @@
-#ifndef ROADS_HDDEDGE_H
-#define ROADS_HDDEDGE_H
+#pragma once
 
 #include "../primitives/Edge.h"
 
@@ -19,5 +18,3 @@ public:
     ) : fromId(fromId), toId(toId), edge(edge) {
     }
 };
-
-#endif

@@ -8,17 +8,16 @@
 #include "Component.h"
 #include "ComponentEdge.h"
 #include "UnionFinder.h"
+#include "../config/RoadConfig.h"
 #include "../geometry/HddResolver.h"
 
 
 std::vector<ComponentEdge>
 ComponentsConnector::connectGraph(
     const std::vector<Component> &components,
-    const double distanceMin,
-    const double distanceMax,
-    const double angleTolerance
+    const RoadConfig &roadConfig
 ) {
-    const auto graph = constructGraph(components, distanceMin, distanceMax, angleTolerance);
+    const auto graph = constructGraph(components, roadConfig);
     return connectGraph(graph);
 }
 
@@ -58,9 +57,7 @@ ComponentsConnector::connectGraph(const std::map<ComponentId, std::map<Component
 std::map<ComponentId, std::map<ComponentId, HddEdge> >
 ComponentsConnector::constructGraph(
     const std::vector<Component> &components,
-    const double distanceMin,
-    const double distanceMax,
-    const double angleTolerance
+    const RoadConfig &roadConfig
 ) {
     std::map<ComponentId, std::map<ComponentId, HddEdge> > graph;
 
@@ -73,7 +70,7 @@ ComponentsConnector::constructGraph(
             const auto &component2 = components[j];
 
             if (auto shortestEdge = HddEdge{};
-                findShortestEdge(component1, component2, angleTolerance, distanceMin, distanceMax, shortestEdge)) {
+                findShortestEdge(component1, component2, roadConfig, shortestEdge)) {
                 componentGraph[component2.componentId] = shortestEdge;
             }
         }
@@ -87,9 +84,7 @@ ComponentsConnector::constructGraph(
 bool ComponentsConnector::findShortestEdge(
     const Component &component1,
     const Component &component2,
-    const double angleTolerance,
-    const double distanceMin,
-    const double distanceMax,
+    const RoadConfig &roadConfig,
     HddEdge &resultEdge
 ) {
     const auto edges1 = component1.edges;
@@ -98,12 +93,9 @@ bool ComponentsConnector::findShortestEdge(
     auto answerEdge = HddEdge{};
     bool exists = false;
 
-    for (const auto edge1: edges1) {
-        for (const auto edge2: edges2) {
-            if (HddEdge tmpEdge = {};
-                HddResolver::resolveHddOptimization(
-                    edge1, edge2, angleTolerance, distanceMin, distanceMax, tmpEdge)
-            ) {
+    for (const auto &edge1: edges1) {
+        for (const auto &edge2: edges2) {
+            if (HddEdge tmpEdge = {}; HddResolver::resolveHddOptimization(edge1, edge2, roadConfig, tmpEdge)) {
                 const double length = utils::edgeLength(tmpEdge.edge);
                 const double answerLength = utils::edgeLength(answerEdge.edge);
 

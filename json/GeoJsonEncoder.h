@@ -1,5 +1,5 @@
-#ifndef ROADS_GEOJSONENCODER_H
-#define ROADS_GEOJSONENCODER_H
+#pragma once
+
 #include <vector>
 #include <nlohmann/json.hpp>
 
@@ -54,5 +54,3 @@ private:
 
     static nlohmann::json getCrs();
 };
-
-#endif

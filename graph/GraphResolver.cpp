@@ -10,9 +10,7 @@
 std::vector<ComponentEdge>
 GraphResolver::resolveGraph(
     const std::vector<std::vector<Edge> > &componentEdges,
-    const double distanceMin,
-    const double distanceMax,
-    const double angleTolerance
+    const RoadConfig &roadConfig
 ) {
     std::vector<Component> components;
     int componentId = 0;
@@ -21,14 +19,7 @@ GraphResolver::resolveGraph(
         components.emplace_back(componentId++, componentEdge);
     }
 
-    auto componentsEdges = ComponentsConnector::connectGraph(
-        components,
-        distanceMin,
-        distanceMax,
-        angleTolerance
-    );
-
-    return componentsEdges;
+    return ComponentsConnector::connectGraph(components, roadConfig);
 }
 
 std::vector<std::vector<Edge> >
@@ -54,10 +45,10 @@ GraphResolver::ringsToEdges(const std::vector<BG_Ring> &rings, int &edgeId) {
 std::vector<Edge>
 GraphResolver::pointsToEdges(const std::vector<Point> &points, int &edgeId) {
     std::vector<Edge> edges;
-    const size_t n = points.size();
+    const size_t pointsSize = points.size();
 
-    for (int i = 0; i < n; ++i) {
-        edges.emplace_back(edgeId++, points[i], points[(i + 1) % n]);
+    for (int i = 0; i < pointsSize; ++i) {
+        edges.emplace_back(edgeId++, points[i], points[(i + 1) % pointsSize]);
     }
 
     return edges;

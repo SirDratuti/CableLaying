@@ -11,39 +11,44 @@ add_executable(
 
         primitives/LineString.h
         primitives/Polygon.h
+        primitives/Polygon.cpp
         primitives/Point.h
         primitives/Edge.h
         primitives/primitives_converter.h
-        primitives/Polygon.cpp
 
         json/GeoJsonEncoder.h
-        json/GeoJsonParser.cpp
-        json/JsonReader.cpp
-        json/JsonWriter.cpp
-        json/RoadConfigParser.cpp
         json/GeoJsonEncoder.cpp
+        json/GeoJsonParser.h
+        json/GeoJsonParser.cpp
+        json/JsonReader.h
+        json/JsonReader.cpp
+        json/JsonWriter.h
+        json/JsonWriter.cpp
 
-        graph/Component.h
-        graph/ComponentsConnector.h
-        graph/GraphResolver.h
+        config/RoadConfigParser.h
+        config/RoadConfigParser.cpp
+        config/RoadConfig.h
+
         graph/utils.h
         graph/ComponentEdge.h
-        graph/UnionFinder.h
-        graph/MinimalEdgeFinder.h
+        graph/Component.h
+        graph/GraphType.h
+        graph/ComponentsConnector.h
         graph/ComponentsConnector.cpp
-        graph/MinimalEdgeFinder.cpp
+        graph/GraphResolver.h
         graph/GraphResolver.cpp
+        graph/UnionFinder.h
         graph/UnionFinder.cpp
+        graph/MinimalEdgeFinder.h
+        graph/MinimalEdgeFinder.cpp
 
-        geometry/PolygonMerger.h
-        geometry/Types.h
-        geometry/HddResolver.h
         geometry/constants.h
         geometry/HddEdge.h
-        geometry/HddResolver.cpp
+        geometry/Types.h
+        geometry/PolygonMerger.h
         geometry/PolygonMerger.cpp
-
-        config/RoadConfig.h
+        geometry/HddResolver.h
+        geometry/HddResolver.cpp
 
         roads/RoadEdge.h
         roads/RoadNode.h

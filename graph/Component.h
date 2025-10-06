@@ -1,5 +1,4 @@
-#ifndef ROADS_COMPONENT_H
-#define ROADS_COMPONENT_H
+#pragma once
 
 #include <vector>
 #include "../primitives/Edge.h"
@@ -17,5 +16,3 @@ public:
     ) : componentId(componentId), edges(edges) {
     }
 };
-
-#endif

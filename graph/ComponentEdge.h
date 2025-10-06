@@ -1,5 +1,4 @@
-#ifndef ROADS_COMPONENTEDGE_H
-#define ROADS_COMPONENTEDGE_H
+#pragma once
 
 #include "Component.h"
 #include "utils.h"
@@ -22,5 +21,3 @@ public:
         return utils::edgeLength(edge.edge) < utils::edgeLength(other.edge.edge);
     }
 };
-
-#endif

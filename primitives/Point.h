@@ -1,12 +1,12 @@
-#ifndef POINT_H
-#define POINT_H
+#pragma once
 
 #include <string>
 #include "../geometry/constants.h"
 
 class Point {
 public:
-    double x, y;
+    double x;
+    double y;
 
     Point() : x(0), y(0) {
     }
@@ -22,5 +22,3 @@ public:
         return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
     }
 };
-
-#endif

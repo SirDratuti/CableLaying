@@ -1,5 +1,4 @@
-#ifndef POLYGON_H
-#define POLYGON_H
+#pragma once
 
 #include <vector>
 #include "LineString.h"
@@ -20,5 +19,3 @@ public:
 
     Polygon();
 };
-
-#endif

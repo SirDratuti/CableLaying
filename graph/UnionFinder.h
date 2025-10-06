@@ -1,5 +1,4 @@
-#ifndef ROADS_UNIONFINDER_H
-#define ROADS_UNIONFINDER_H
+#pragma once
 
 #include <map>
 
@@ -14,5 +13,3 @@ public:
 
     void unite(ComponentId x, ComponentId y);
 };
-
-#endif

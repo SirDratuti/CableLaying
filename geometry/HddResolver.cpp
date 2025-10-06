@@ -8,12 +8,10 @@
 bool HddResolver::resolveHddOptimization(
     const Edge &edge1,
     const Edge &edge2,
-    const double angleTolerance,
-    const double distanceMin,
-    const double distanceMax,
+    const RoadConfig &roadConfig,
     HddEdge &result
 ) {
-    const auto finder = MinimalEdgeFinder{edge1, edge2, angleTolerance, distanceMin, distanceMax};
+    const auto finder = MinimalEdgeFinder{edge1, edge2, roadConfig};
 
     Point p1{}, p2{};
 

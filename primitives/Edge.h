@@ -1,5 +1,4 @@
-#ifndef ROADS_EDGE_H
-#define ROADS_EDGE_H
+#pragma once
 
 #include "Point.h"
 
@@ -8,7 +7,8 @@ typedef int EdgeId;
 class Edge {
 public:
     EdgeId id;
-    Point start, end;
+    Point start;
+    Point end;
 
     Edge() : id(-1), start(Point{0, 0}), end(Point{0, 0}) {
     }
@@ -23,5 +23,3 @@ public:
         return "[" + start.toString() + " " + end.toString() + "]";
     }
 };
-
-#endif

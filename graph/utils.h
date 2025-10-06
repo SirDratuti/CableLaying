@@ -1,5 +1,4 @@
-#ifndef ROADS_UTILS_H
-#define ROADS_UTILS_H
+#pragma once
 
 #include "../primitives/Point.h"
 #include "../primitives/Edge.h"
@@ -52,4 +51,3 @@ namespace utils {
         return a.x * b.x + a.y * b.y;
     }
 }
-#endif

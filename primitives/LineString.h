@@ -1,5 +1,5 @@
-#ifndef ROADS_LINESTRING_H
-#define ROADS_LINESTRING_H
+#pragma once
+
 #include <vector>
 
 #include "Point.h"
@@ -13,5 +13,3 @@ public:
 
     std::vector<Point> &getPoints() { return points; }
 };
-
-#endif

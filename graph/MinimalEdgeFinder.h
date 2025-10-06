@@ -1,26 +1,22 @@
-#ifndef ROADS_EdgeFINDER_H
-#define ROADS_EdgeFINDER_H
+#pragma once
 
+#include "GraphType.h"
+#include "../config/RoadConfig.h"
 #include "../primitives/Point.h"
 #include "../primitives/Edge.h"
 
 class MinimalEdgeFinder {
     Edge edge1, edge2;
+    GraphType graphType;
     double radiansTolerance;
-    double distanceMin, distanceMax;
+    double hddMinLength, hddMaxLength;
 
 public:
     MinimalEdgeFinder(
         const Edge &edge1,
         const Edge &edge2,
-        double angleTolerance,
-        double distanceMin,
-        double distanceMax
+        const RoadConfig &roadConfig
     );
-
-    bool checkAngleConstraints(double t1, double t2, double &angleDeviation) const;
-
-    double objectiveFunction(double t1, double t2) const;
 
     bool findMinimalEdge(
         Point &bestPointStart,
@@ -28,6 +24,13 @@ public:
         double &bestLength,
         double &bestAngleDeviation
     ) const;
-};
 
-#endif
+private:
+    bool checkAngleConstraints(double t1, double t2, double &angleDeviation) const;
+
+    bool canEdgesBeSubdivided(double t1, double t2) const;
+
+    bool canSegmentSatisfyConstraints(double segmentLength) const;
+
+    double objectiveFunction(double t1, double t2) const;
+};

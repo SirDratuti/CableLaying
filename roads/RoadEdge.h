@@ -1,5 +1,4 @@
-#ifndef ROADS_ROADEDGE_H
-#define ROADS_ROADEDGE_H
+#pragma once
 
 #include "RoadNode.h"
 
@@ -16,5 +15,3 @@ public:
     RoadEdge(const RoadNode &from, const RoadNode &to, const RoadEdgeType type) : from(from), to(to), type(type) {
     }
 };
-
-#endif

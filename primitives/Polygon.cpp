@@ -4,8 +4,7 @@
 #include <vector>
 #include "LineString.h"
 
-Polygon::Polygon() {
-}
+Polygon::Polygon() = default;
 
 void Polygon::addRing(const LineString &ring) {
     rings.push_back(ring);

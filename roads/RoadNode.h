@@ -1,5 +1,4 @@
-#ifndef ROADS_NODE_H
-#define ROADS_NODE_H
+#pragma once
 
 #include "../primitives/Point.h"
 
@@ -20,6 +19,3 @@ public:
     ) : point(point), nodeType(nodeType) {
     }
 };
-
-
-#endif

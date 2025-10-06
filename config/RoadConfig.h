@@ -1,5 +1,5 @@
-#ifndef ROADS_ROADCONFIG_H
-#define ROADS_ROADCONFIG_H
+#pragma once
+#include "../graph/GraphType.h"
 
 class RoadConfig {
     double trenchCost;
@@ -11,6 +11,8 @@ class RoadConfig {
 
     double alpha;
 
+    GraphType graphType;
+
 public:
     RoadConfig(
         const double trenchCost,
@@ -18,13 +20,15 @@ public:
         const double transitionCost,
         const double hddMinLength,
         const double hddMaxLength,
-        const double alpha
+        const double alpha,
+        const GraphType graphType
     ) : trenchCost(trenchCost),
         hddCost(hddCost),
         transitionCost(transitionCost),
         hddMinLength(hddMinLength),
         hddMaxLength(hddMaxLength),
-        alpha(alpha) {
+        alpha(alpha),
+        graphType(graphType) {
     }
 
     double getTrenchCost() const { return trenchCost; }
@@ -33,6 +37,6 @@ public:
     double getHddMinLength() const { return hddMinLength; }
     double getHddMaxLength() const { return hddMaxLength; }
     double getAlpha() const { return alpha; }
-};
 
-#endif
+    GraphType getGraphType() const { return graphType; }
+};
