@@ -34,11 +34,8 @@ private:
         const std::map<NodeId, NodeConnections> &connections,
         nlohmann::json &features);
 
-    static nlohmann::json createMultiLineStringLayer(
-        const nlohmann::json &coordinates,
-        const nlohmann::json &edgeMetadata,
-        const std::string &layerId, const std::string &layerName,
-        RoadEdgeType edgeType);
+    static nlohmann::json createMultiLineString(
+        const nlohmann::json &coordinates);
 
     static nlohmann::json pointToGeoJSON(const BG_Point &point);
 

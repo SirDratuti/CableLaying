@@ -28,9 +28,15 @@ public:
 private:
     bool checkAngleConstraints(double t1, double t2, double &angleDeviation) const;
 
-    bool canEdgesBeSubdivided(double t1, double t2) const;
+    bool canEdgesBeSubdivided(double t1, double t2, double &distanceToSatisfy) const;
 
-    bool canSegmentSatisfyConstraints(double segmentLength) const;
+    bool canSegmentSatisfyConstraints(double segmentLength, double &distanceToSatisfy) const;
 
     double objectiveFunction(double t1, double t2) const;
+
+    double getLengthPenalty(double length) const;
+
+    double getSubdivisionPenalty(double t1, double t2) const;
+
+    double getAnglePenalty(double t1, double t2) const;
 };

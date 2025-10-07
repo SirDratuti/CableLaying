@@ -1,6 +1,7 @@
 #include "MinimalEdgeFinder.h"
 
 #include <cmath>
+#include <vector>
 
 #include "utils.h"
 #include "../primitives/Point.h"
@@ -70,19 +71,42 @@ double MinimalEdgeFinder::objectiveFunction(const double t1, const double t2) co
 
     const double length = utils::distance(p1, p2);
 
-    if (length < hddMinLength || length > hddMaxLength) {
-        return 1e10;
+    double penalty = 0.0;
+
+    penalty += getLengthPenalty(length);
+    penalty += getSubdivisionPenalty(t1, t2);
+    penalty += getAnglePenalty(t1, t2);
+
+    return length + penalty;
+}
+
+double MinimalEdgeFinder::getLengthPenalty(const double length) const {
+    if (length >= hddMinLength && length <= hddMaxLength) {
+        return 0.0;
     }
 
-    if (graphType == HddOnly && !canEdgesBeSubdivided(t1, t2)) {
-        return 1e10;
+    if (length < hddMinLength) {
+        const double violation = hddMinLength - length;
+        return 1e6 * violation * violation;
     }
+    const double violation = length - hddMaxLength;
+    return 1e6 * violation * violation;
+}
 
-    if (double angleDev; !checkAngleConstraints(t1, t2, angleDev)) {
-        return 1e10;
+double MinimalEdgeFinder::getSubdivisionPenalty(const double t1, const double t2) const {
+    double distanceToSatisfy = 0;
+    if (graphType != HddOnly || canEdgesBeSubdivided(t1, t2, distanceToSatisfy)) {
+        return 0.0;
     }
+    return 1e6 * distanceToSatisfy;
+}
 
-    return length;
+double MinimalEdgeFinder::getAnglePenalty(const double t1, const double t2) const {
+    double angleDev;
+    if (checkAngleConstraints(t1, t2, angleDev)) {
+        return 0.0;
+    }
+    return 1e6 * angleDev * angleDev;
 }
 
 bool MinimalEdgeFinder::findMinimalEdge(
@@ -110,7 +134,8 @@ bool MinimalEdgeFinder::findMinimalEdge(
                 if (const double length = utils::distance(p1, p2);
                     length >= hddMinLength && length <= hddMaxLength
                 ) {
-                    if (graphType == Default || canEdgesBeSubdivided(t1, t2)) {
+                    if ([[maybe_unused]] double distanceToSatisfy = 0;
+                        graphType == Default || canEdgesBeSubdivided(t1, t2, distanceToSatisfy)) {
                         if (length < currentBestLength) {
                             currentBestLength = length;
                             best_t1 = t1;
@@ -150,13 +175,19 @@ bool MinimalEdgeFinder::findMinimalEdge(
     bestLength = utils::distance(bestPointStart, bestPointEnd);
     checkAngleConstraints(best_t1, best_t2, bestAngleDeviation);
 
+    [[maybe_unused]] double distanceToSatisfy = 0;
+
     return bestLength >= hddMinLength &&
            bestLength <= hddMaxLength &&
            bestAngleDeviation <= radiansTolerance &&
-           (graphType == Default || canEdgesBeSubdivided(best_t1, best_t2));
+           (graphType == Default || canEdgesBeSubdivided(best_t1, best_t2, distanceToSatisfy));
 }
 
-bool MinimalEdgeFinder::canEdgesBeSubdivided(const double t1, const double t2) const {
+bool MinimalEdgeFinder::canEdgesBeSubdivided(
+    const double t1,
+    const double t2,
+    double &distanceToSatisfy
+) const {
     const double totalLength1 = utils::edgeLength(edge1);
     const double totalLength2 = utils::edgeLength(edge2);
 
@@ -166,22 +197,43 @@ bool MinimalEdgeFinder::canEdgesBeSubdivided(const double t1, const double t2) c
     const double edge2Segment1 = totalLength2 * t2;
     const double edge2Segment2 = totalLength2 * (1.0 - t2);
 
-    return canSegmentSatisfyConstraints(edge1Segment1) &&
-           canSegmentSatisfyConstraints(edge1Segment2) &&
-           canSegmentSatisfyConstraints(edge2Segment1) &&
-           canSegmentSatisfyConstraints(edge2Segment2);
+    double seg1Distance1ToSatisfy = 0;
+    double seg1Distance2ToSatisfy = 0;
+    double seg2Distance1ToSatisfy = 0;
+    double seg2Distance2ToSatisfy = 0;
+
+
+    const bool canSatisfy =
+            canSegmentSatisfyConstraints(edge1Segment1, seg1Distance1ToSatisfy) &&
+            canSegmentSatisfyConstraints(edge1Segment2, seg1Distance2ToSatisfy) &&
+            canSegmentSatisfyConstraints(edge2Segment1, seg2Distance1ToSatisfy) &&
+            canSegmentSatisfyConstraints(edge2Segment2, seg2Distance2ToSatisfy);
+
+    auto distances = std::vector{
+        seg1Distance1ToSatisfy, seg1Distance2ToSatisfy, seg2Distance1ToSatisfy, seg2Distance2ToSatisfy
+    };
+    const auto maxElement = std::ranges::max_element(distances);
+    distanceToSatisfy = *maxElement;
+
+    return canSatisfy;
 }
 
-bool MinimalEdgeFinder::canSegmentSatisfyConstraints(const double segmentLength) const {
+bool MinimalEdgeFinder::canSegmentSatisfyConstraints(
+    const double segmentLength,
+    double &distanceToSatisfy
+) const {
+    distanceToSatisfy = 0.0;
+
     if (segmentLength < hddMinLength) {
+        distanceToSatisfy = hddMinLength - segmentLength;
         return false;
-    }
-    if (segmentLength <= hddMaxLength) {
-        return true;
     }
 
     const int minSegments = std::ceil(segmentLength / hddMaxLength);
-    const double maxPossibleLengthPerSegment = segmentLength / minSegments;
-
-    return maxPossibleLengthPerSegment >= hddMinLength;
+    if (const double segmentLengthAfterSubdivision = segmentLength / minSegments;
+        segmentLengthAfterSubdivision >= hddMinLength) {
+        return true;
+    }
+    distanceToSatisfy = (hddMinLength * minSegments) - segmentLength;
+    return false;
 }
