@@ -55,7 +55,15 @@ int main() {
 
     nlohmann::json graphJson = GeoJsonEncoder::graphToLayeredFeaturesCollection(
         merger.getNodes(), merger.getNodesConnections());
-    JsonWriter::saveToFile(graphJson, "../data/graphHddOnly.geojson");
+
+    std::string fileName;
+    if (roadConfig.getGraphType() == Default) {
+        fileName = "../data/graph.geojson";
+    } else {
+        fileName = "../data/graphHddOnly.geojson";
+    }
+
+    JsonWriter::saveToFile(graphJson, fileName);
 
     return 0;
 }

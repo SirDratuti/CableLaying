@@ -29,9 +29,19 @@ public:
     std::map<NodeId, RoadNode> getNodes();
 
 private:
-    void splitTrenchNodes(NodeId &currentNodeId);
 
-    std::vector<std::pair<RoadEdgeType, NodeId>> splitTrenchToHDD(NodeId startNodeId, NodeId endNodeId, NodeId &currentNodeId);
+    struct HDDChain {
+        std::vector<NodeId> intermediateNodes;
+        NodeId startNodeId;
+        NodeId endNodeId;
+    };
+
+    void splitTrenchEdgesToHDD(NodeId &currentNodeId);
+
+    HDDChain splitTrenchToHDD(NodeId startNodeId, NodeId endNodeId, NodeId &nodeId);
+
+    static void updateConnectionsWithHDDChain(std::map<NodeId, NodeConnections> &newConnections, NodeId fromNodeId,
+                                              NodeId toNodeId, const HDDChain &chain, bool forwardDirection);
 
     int calculateNumberOfHDDSegments(double distance) const;
 

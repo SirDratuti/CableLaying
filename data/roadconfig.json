@@ -1,0 +1,9 @@
+{
+  "trenchCost": 10,
+  "hddCost": 30,
+  "transitionCost": 40,
+  "hddMinLength": 30,
+  "hddMaxLength": 150,
+  "alpha": 10,
+  "hddOnly": true
+}
